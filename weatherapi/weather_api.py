@@ -4,12 +4,12 @@ from bs4 import BeautifulSoup
 
 head = 'http://www.weather.com.cn/weather/'
 suffix = '.shtml'
-txt = 'city_code_in_weather_report.txt'
+path = 'city_code_in_weather_report.txt'
 
 
 def __load_code():  # .txt->dict
     result = dict()
-    with open(txt, 'r', encoding='utf-8') as f:
+    with open(path, 'r', encoding='utf-8') as f:
         line = f.readline()  # 每行格式为  101010100=北京
         while line != '':
             line.strip()
