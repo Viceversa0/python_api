@@ -14,17 +14,11 @@
 城市名，type为字符串，如西安、北京，因为数据引用中国气象网，因此只支持中国城市
 ### 返回：
 + 列表，包括1-7的天气数据，每一天的分别为一个列表成员，列表内为字符串，代表内容如上所示；
-+ None，城市不在*city_code_in_weather_report.txt*内。
++ None，城市不在*.txt*内。
 
 ---
 
 ## 文件说明
-+ city_code_in_weather_report.txt：存放中国天气网内各个城市代码
-+ requirements.txt：用到的库及其版本
-+ weather_api.py：主角
-+ run.png：运行截图
++ city_code.txt：存放中国天气网内各个城市代码
++ weather.py：主角
 
----
-
-## 说明
-+ “path”参数根据实际自行改动，方式文件.txt加载失败。笔者在调用时，发现如果main程序和api不在同一目录时会加载失败（因为程序自动从当前进程目录下去寻找相应文件，而不是api所在的目录）
