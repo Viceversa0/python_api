@@ -1,15 +1,18 @@
 import requests
 import re
 from bs4 import BeautifulSoup
+import os
 
 head = 'http://www.weather.com.cn/weather/'
 suffix = '.shtml'
-path = 'city_code_in_weather_report.txt'
+txt = 'city_code.txt'
 
 
-def __load_code():  # .txt->dict
+def _load_code():  # .txt->dict
+    # 获取当前包的绝对路径
+    package_path = os.path.dirname(os.path.abspath(__file__))
     result = dict()
-    with open(path, 'r', encoding='utf-8') as f:
+    with open(package_path + "/" + txt, 'r', encoding='utf-8') as f:
         line = f.readline()  # 每行格式为  101010100=北京
         while line != '':
             line.strip()
@@ -23,7 +26,7 @@ def __load_code():  # .txt->dict
     return result
 
 
-def get_list(s_html):  # html->字符串list
+def _get_list(s_html):  # html->字符串list
     result = []
     for i in s_html:
         arr = i.get_text().split('\n')
@@ -37,7 +40,7 @@ def get_list(s_html):  # html->字符串list
     return result
 
 
-def wind_dir(s_html):  # 风向比较特殊，有效内容在class内，特殊处理
+def _wind_dir(s_html):  # 风向比较特殊，有效内容在class内，特殊处理
     result = []
     pattern = r'title=".*"'
     for i in s_html:
@@ -50,7 +53,7 @@ def wind_dir(s_html):  # 风向比较特殊，有效内容在class内，特殊�
     return result
 
 
-def get_html(soup, tag):  # 筛选tag为‘li’的内容，因为有效数据在这里
+def _get_html(soup, tag):  # 筛选tag为‘li’的内容，因为有效数据在这里
     res = []
     html = soup.find_all(tag)
     for i in html:
@@ -64,17 +67,17 @@ def get_html(soup, tag):  # 筛选tag为‘li’的内容，因为有效数据�
 
 
 def get_weather(city):
-    dic = __load_code()
+    dic = _load_code()
     if city not in dic:
         return None
     r = requests.get(head + dic[city] + suffix)
     r.encoding = r.apparent_encoding
     html_doc = r.text
     soup = BeautifulSoup(html_doc, 'html.parser')
-    ori_html = get_html(soup, 'li')
+    ori_html = _get_html(soup, 'li')
 
-    w_list = get_list(ori_html)
-    wind_list = wind_dir(ori_html)
+    w_list = _get_list(ori_html)
+    wind_list = _wind_dir(ori_html)
     index = 0
     for i in w_list:  # 合并风向和其他参数
         i.append(wind_list[index])
